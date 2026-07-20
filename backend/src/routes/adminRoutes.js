@@ -6,6 +6,7 @@ import {
   getAdminProducts,
   createProduct,
   updateProduct,
+  toggleProductStatus,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -38,6 +39,12 @@ router.put(
   "/products/:id",
   authMiddleware,
   updateProduct
+);
+
+router.patch(
+  "/products/:id/status",
+  authMiddleware,
+  toggleProductStatus
 );
 
 export default router;

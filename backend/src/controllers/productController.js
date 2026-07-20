@@ -194,3 +194,56 @@ export const updateProduct = async (req, res) => {
     });
   }
 };
+
+export const toggleProductStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [products] = await pool.query(
+      `
+      SELECT is_active
+      FROM products
+      WHERE id = ?
+      `,
+      [id]
+    );
+
+    if (products.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Producto no encontrado",
+      });
+    }
+
+    const newStatus = !products[0].is_active;
+
+    await pool.query(
+      `
+      UPDATE products
+      SET is_active = ?
+      WHERE id = ?
+      `,
+      [newStatus, id]
+    );
+
+    res.json({
+      success: true,
+      message: newStatus
+        ? "Producto activado correctamente"
+        : "Producto desactivado correctamente",
+      data: {
+        is_active: newStatus,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Error cambiando estado del producto:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Error cambiando el estado del producto",
+    });
+  }
+};
