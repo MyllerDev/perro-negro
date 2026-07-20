@@ -2,6 +2,10 @@ import express from "express";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 
+import {
+  getAdminProducts,
+} from "../controllers/productController.js";
+
 const router = express.Router();
 
 router.get(
@@ -14,6 +18,12 @@ router.get(
       admin: req.admin,
     });
   }
+);
+
+router.get(
+  "/products",
+  authMiddleware,
+  getAdminProducts
 );
 
 export default router;
