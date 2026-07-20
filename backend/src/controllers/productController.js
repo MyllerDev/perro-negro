@@ -127,3 +127,70 @@ export const createProduct = async (req, res) => {
     });
   }
 };
+
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      name,
+      description,
+      price,
+      stock,
+      image_url,
+      category,
+      is_active,
+    } = req.body;
+
+    if (!name || price === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "El nombre y el precio son obligatorios",
+      });
+    }
+
+    const [result] = await pool.query(
+      `
+      UPDATE products
+      SET
+        name = ?,
+        description = ?,
+        price = ?,
+        stock = ?,
+        image_url = ?,
+        category = ?,
+        is_active = ?
+      WHERE id = ?
+      `,
+      [
+        name,
+        description || null,
+        price,
+        stock ?? 0,
+        image_url || null,
+        category || null,
+        is_active ?? true,
+        id,
+      ]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Producto no encontrado",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Producto actualizado correctamente",
+    });
+  } catch (error) {
+    console.error("Error actualizando producto:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Error actualizando el producto",
+    });
+  }
+};

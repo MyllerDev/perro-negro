@@ -5,6 +5,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import {
   getAdminProducts,
   createProduct,
+  updateProduct,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -31,6 +32,12 @@ router.post(
   "/products",
   authMiddleware,
   createProduct
+);
+
+router.put(
+  "/products/:id",
+  authMiddleware,
+  updateProduct
 );
 
 export default router;
