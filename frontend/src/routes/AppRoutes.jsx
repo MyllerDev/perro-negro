@@ -9,6 +9,7 @@ import Checkout from "../pages/Checkout/Checkout";
 import Payment from "../pages/Payment/Payment";
 import Contact from "../pages/Contact/Contact";
 import NotFound from "../pages/NotFound/NotFound";
+import Login from "../pages/Admin/Login";
 
 export function AppRoutes() {
   return (
@@ -48,6 +49,11 @@ export function AppRoutes() {
           path="*"
           element={<NotFound />}
         />
+
+        <Route
+  path="/admin/login"
+  element={<Login />}
+/>
       </Route>
     </Routes>
   );
