@@ -10,6 +10,8 @@ import Payment from "../pages/Payment/Payment";
 import Contact from "../pages/Contact/Contact";
 import NotFound from "../pages/NotFound/NotFound";
 import Login from "../pages/Admin/Login";
+import ProtectedRoute from "./ProtectedRoute";
+import AdminDashboard from "../pages/Admin/AdminDashboard";
 
 export function AppRoutes() {
   return (
@@ -51,9 +53,17 @@ export function AppRoutes() {
         />
 
         <Route
-  path="/admin/login"
-  element={<Login />}
-/>
+        path="/admin/login"
+        element={<Login />}
+        />
+
+        <Route element={<ProtectedRoute />}>
+        <Route
+        path="/admin"
+        element={<AdminDashboard />}
+        />
+        </Route>
+
       </Route>
     </Routes>
   );

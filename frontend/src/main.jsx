@@ -8,6 +8,7 @@ import App from "./App.jsx";
 import "./styles/globals.css";
 
 import { CartProvider } from "./context/CartContext.jsx";
+import { AuthProvider } from "./context/AuthContext";
 
 
 ReactDOM.createRoot(
@@ -18,13 +19,13 @@ ReactDOM.createRoot(
   <React.StrictMode>
 
     <BrowserRouter>
-
+    <AuthProvider>
       <CartProvider>
 
         <App />
 
       </CartProvider>
-
+      </AuthProvider>
     </BrowserRouter>
 
   </React.StrictMode>
