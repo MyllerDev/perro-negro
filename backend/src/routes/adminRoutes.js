@@ -4,6 +4,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 
 import {
   getAdminProducts,
+  createProduct,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -24,6 +25,12 @@ router.get(
   "/products",
   authMiddleware,
   getAdminProducts
+);
+
+router.post(
+  "/products",
+  authMiddleware,
+  createProduct
 );
 
 export default router;
