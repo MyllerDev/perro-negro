@@ -7,6 +7,7 @@ import {
   createProduct,
   updateProduct,
   toggleProductStatus,
+  getProductStats,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -47,4 +48,9 @@ router.patch(
   toggleProductStatus
 );
 
+router.get(
+  "/products/stats",
+  authMiddleware,
+  getProductStats
+);
 export default router;

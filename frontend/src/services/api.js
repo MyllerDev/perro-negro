@@ -95,3 +95,11 @@ export const toggleProductStatus = async (
     true
   );
 };
+
+export const getProductStats = async () => {
+  return request(
+    "/admin/products/stats",
+    {},
+    true
+  );
+};

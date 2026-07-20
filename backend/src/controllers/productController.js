@@ -247,3 +247,32 @@ export const toggleProductStatus = async (req, res) => {
     });
   }
 };
+
+export const getProductStats = async (req, res) => {
+  try {
+    const [stats] = await pool.query(`
+      SELECT
+        COUNT(*) AS total_products,
+        SUM(CASE WHEN is_active = TRUE THEN 1 ELSE 0 END) AS active_products,
+        SUM(CASE WHEN is_active = FALSE THEN 1 ELSE 0 END) AS inactive_products,
+        COALESCE(SUM(stock), 0) AS total_stock,
+        SUM(CASE WHEN stock <= 5 THEN 1 ELSE 0 END) AS low_stock_products
+      FROM products
+    `);
+
+    res.json({
+      success: true,
+      data: stats[0],
+    });
+  } catch (error) {
+    console.error(
+      "Error obteniendo estadísticas de productos:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Error obteniendo estadísticas",
+    });
+  }
+};
