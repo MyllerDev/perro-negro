@@ -42,7 +42,9 @@ const request = async (
 
 // Productos públicos
 export const getProducts = async () => {
-  return request("/products");
+  const response = await request("/products");
+
+  return response.data;
 };
 
 // Productos del administrador
@@ -103,3 +105,4 @@ export const getProductStats = async () => {
     true
   );
 };
+

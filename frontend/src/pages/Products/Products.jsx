@@ -13,14 +13,17 @@ function Products() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await getProducts();
+        const response = await getProducts();
 
-        setProducts(data);
+        setProducts(response.data);
       } catch (error) {
-        console.error(error);
+        console.error(
+          "Error cargando productos:",
+          error
+        );
 
         setError(
-          "No fue posible cargar los productos."
+          "No fue posible cargar los productos"
         );
       } finally {
         setLoading(false);
@@ -30,50 +33,46 @@ function Products() {
     loadProducts();
   }, []);
 
+  if (loading) {
+    return (
+      <Container className="py-32 text-center">
+        <p className="text-gray-400">
+          Cargando productos...
+        </p>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="py-32 text-center">
+        <p className="text-red-400">
+          {error}
+        </p>
+      </Container>
+    );
+  }
+
   return (
     <Container className="py-20">
       <div className="mb-12">
-        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#d4af37]">
-          Menú
-        </p>
-
-        <h1 className="text-4xl font-black md:text-6xl">
+        <h1 className="text-4xl font-black">
           Nuestros productos
         </h1>
 
-        <p className="mt-4 max-w-2xl text-gray-400">
-          Descubre los productos disponibles de Perro Negro.
+        <p className="mt-3 text-gray-400">
+          Descubre nuestra selección de productos.
         </p>
       </div>
 
-      {loading && (
-        <div className="py-20 text-center text-gray-400">
-          Cargando productos...
-        </div>
-      )}
-
-      {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-center text-red-400">
-          {error}
-        </div>
-      )}
-
-      {!loading && !error && products.length === 0 && (
-        <div className="py-20 text-center text-gray-400">
-          No hay productos disponibles.
-        </div>
-      )}
-
-      {!loading && !error && products.length > 0 && (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
-          ))}
-        </div>
-      )}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+          />
+        ))}
+      </div>
     </Container>
   );
 }
