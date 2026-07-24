@@ -13,10 +13,12 @@ const request = async (
   };
 
   if (requiresAuth) {
-    const token = localStorage.getItem("adminToken");
+    const token =
+      localStorage.getItem("adminToken");
 
     if (token) {
-      headers.Authorization = `Bearer ${token}`;
+      headers.Authorization =
+        `Bearer ${token}`;
     }
   }
 
@@ -42,7 +44,9 @@ const request = async (
 
 // Productos públicos
 export const getProducts = async () => {
-  const response = await request("/products");
+  const response = await request(
+    "/products"
+  );
 
   return response.data;
 };
@@ -85,24 +89,74 @@ export const updateProduct = async (
   );
 };
 
-// Activar/desactivar producto
-export const toggleProductStatus = async (
-  id
-) => {
-  return request(
-    `/admin/products/${id}/status`,
-    {
-      method: "PATCH",
-    },
-    true
-  );
-};
+// Activar o desactivar producto
+export const toggleProductStatus =
+  async (id) => {
+    return request(
+      `/admin/products/${id}/status`,
+      {
+        method: "PATCH",
+      },
+      true
+    );
+  };
 
-export const getProductStats = async () => {
-  return request(
-    "/admin/products/stats",
-    {},
-    true
-  );
-};
+// Estadísticas de productos
+export const getProductStats =
+  async () => {
+    return request(
+      "/admin/products/stats",
+      {},
+      true
+    );
+  };
 
+// Configuración de Wompi
+export const getPaymentConfig =
+  async () => {
+    return request(
+      "/payments/config"
+    );
+  };
+
+// Crear pago
+export const createPayment =
+  async (paymentData) => {
+    return request(
+      "/payments/create",
+      {
+        method: "POST",
+        body: JSON.stringify(
+          paymentData
+        ),
+      }
+    );
+  };
+
+// Crear cliente
+export const createCustomer =
+  async (customerData) => {
+    return request(
+      "/customers",
+      {
+        method: "POST",
+        body: JSON.stringify(
+          customerData
+        ),
+      }
+    );
+  };
+
+// Crear venta
+export const createSale =
+  async (saleData) => {
+    return request(
+      "/sales",
+      {
+        method: "POST",
+        body: JSON.stringify(
+          saleData
+        ),
+      }
+    );
+  };
