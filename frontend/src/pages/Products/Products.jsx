@@ -13,9 +13,10 @@ function Products() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const response = await getProducts();
+        const productsData =
+          await getProducts();
 
-        setProducts(response.data);
+        setProducts(productsData);
       } catch (error) {
         console.error(
           "Error cargando productos:",
@@ -65,14 +66,22 @@ function Products() {
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
-      </div>
+      {products.length === 0 ? (
+        <div className="py-20 text-center">
+          <p className="text-gray-400">
+            No hay productos disponibles.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+            />
+          ))}
+        </div>
+      )}
     </Container>
   );
 }
