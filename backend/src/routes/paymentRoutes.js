@@ -5,6 +5,7 @@ import {
 import {
   getPaymentConfig,
   createPayment,
+  getPaymentStatus,
 } from "../controllers/paymentController.js";
 
 const router =
@@ -18,6 +19,11 @@ router.get(
 router.post(
   "/create",
   createPayment
+);
+
+router.get(
+  "/:transactionId",
+  getPaymentStatus
 );
 
 export default router;

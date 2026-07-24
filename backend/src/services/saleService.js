@@ -137,3 +137,34 @@ export const createSale = async (saleData) => {
     connection.release();
   }
 };
+
+export const updateSaleStatus = async (
+  saleId,
+  status
+) => {
+  const [result] =
+    await pool.query(
+      `
+      UPDATE sales
+      SET status = ?
+      WHERE id = ?
+      `,
+      [
+        status,
+        saleId,
+      ]
+    );
+
+  if (
+    result.affectedRows === 0
+  ) {
+    throw new Error(
+      "Venta no encontrada"
+    );
+  }
+
+  return {
+    sale_id: saleId,
+    status,
+  };
+};

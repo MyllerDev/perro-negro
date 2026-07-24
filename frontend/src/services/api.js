@@ -160,3 +160,58 @@ export const createSale =
       }
     );
   };
+
+  export async function getPaymentStatus(
+  transactionId
+) {
+  const response = await fetch(
+    `${API_URL}/payments/${transactionId}`
+  );
+
+  const data =
+    await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.message ||
+        "No fue posible consultar el estado del pago"
+    );
+  }
+
+  return data;
+}
+
+export async function updateSaleStatus(
+  saleId,
+  status
+) {
+  const response =
+    await fetch(
+      `${API_URL}/sales/status`,
+      {
+        method: "PATCH",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+          saleId,
+          status,
+        }),
+      }
+    );
+
+  const data =
+    await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.message ||
+        "No fue posible actualizar la venta"
+    );
+  }
+
+  return data;
+}

@@ -97,3 +97,49 @@ export async function createWompiTransaction({
 
   return data;
 }
+
+export async function getWompiTransaction(
+  transactionId
+) {
+  const publicKey =
+    process.env.WOMPI_PUBLIC_KEY;
+
+  if (!publicKey) {
+    throw new Error(
+      "WOMPI_PUBLIC_KEY no está configurada"
+    );
+  }
+
+  const response = await fetch(
+    `${WOMPI_API_URL}/transactions/${transactionId}`,
+    {
+      method: "GET",
+
+      headers: {
+        Authorization:
+          `Bearer ${publicKey}`,
+      },
+    }
+  );
+
+  const data =
+    await response.json();
+
+  if (!response.ok) {
+    console.error(
+      "Error consultando transacción Wompi:",
+      JSON.stringify(
+        data,
+        null,
+        2
+      )
+    );
+
+    throw new Error(
+      data.error?.reason ||
+        "No fue posible consultar la transacción"
+    );
+  }
+
+  return data;
+}

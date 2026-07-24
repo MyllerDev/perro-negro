@@ -4,6 +4,7 @@ import {
 
 import {
   createWompiTransaction,
+  getWompiTransaction,
 } from "../services/paymentService.js";
 
 export async function getPaymentConfig(
@@ -95,6 +96,50 @@ export async function createPayment(
       message:
         error.message ||
         "No fue posible crear el pago",
+    });
+  }
+}
+
+export async function getPaymentStatus(
+  req,
+  res
+) {
+  try {
+    const {
+      transactionId,
+    } = req.params;
+
+    if (!transactionId) {
+      return res.status(400).json({
+        success: false,
+
+        message:
+          "El ID de la transacción es obligatorio",
+      });
+    }
+
+    const transaction =
+      await getWompiTransaction(
+        transactionId
+      );
+
+    res.json({
+      success: true,
+
+      data: transaction,
+    });
+  } catch (error) {
+    console.error(
+      "Error consultando estado del pago:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+
+      message:
+        error.message ||
+        "No fue posible consultar el estado del pago",
     });
   }
 }
