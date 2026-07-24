@@ -2,24 +2,26 @@ import {
   getWompiAcceptanceToken,
 } from "../services/wompiService.js";
 
+import {
+  createWompiTransaction,
+} from "../services/paymentService.js";
+
 export async function getPaymentConfig(
-  request,
-  response
+  req,
+  res
 ) {
   try {
-    const {
-      acceptanceToken,
-      personalAuthToken,
-    } = await getWompiAcceptanceToken();
+    const config =
+      await getWompiAcceptanceToken();
 
-    return response.json({
+    res.json({
       success: true,
+
       data: {
         publicKey:
           process.env.WOMPI_PUBLIC_KEY,
 
-        acceptanceToken,
-        personalAuthToken,
+        ...config,
       },
     });
   } catch (error) {
@@ -28,10 +30,71 @@ export async function getPaymentConfig(
       error
     );
 
-    return response.status(500).json({
+    res.status(500).json({
       success: false,
+
       message:
         "No fue posible obtener la configuración de pago",
+    });
+  }
+}
+
+export async function createPayment(
+  req,
+  res
+) {
+  try {
+    const {
+      amountInCents,
+      reference,
+      customerEmail,
+      acceptanceToken,
+      personalAuthToken,
+      paymentMethod,
+    } = req.body;
+
+    if (
+      !amountInCents ||
+      !reference ||
+      !customerEmail ||
+      !acceptanceToken ||
+      !personalAuthToken ||
+      !paymentMethod
+    ) {
+      return res.status(400).json({
+        success: false,
+
+        message:
+          "Faltan datos requeridos para crear el pago",
+      });
+    }
+
+    const transaction =
+      await createWompiTransaction({
+        amountInCents,
+        reference,
+        customerEmail,
+        acceptanceToken,
+        personalAuthToken,
+        paymentMethod,
+      });
+
+    res.status(201).json({
+      success: true,
+      data: transaction,
+    });
+  } catch (error) {
+    console.error(
+      "Error creando pago:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+
+      message:
+        error.message ||
+        "No fue posible crear el pago",
     });
   }
 }
